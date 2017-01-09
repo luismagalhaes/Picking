@@ -51,12 +51,7 @@ public class Service : IServiceSoap,IServiceRest
         }
         catch (Exception ex)
         {
-            StringBuilder retornaErro = new StringBuilder();
-            retornaErro.AppendLine("Erro na Base de Dados.\n");
-            retornaErro.AppendLine(ex.Message.ToString());
-            retornaErro.AppendLine("\nData/Hora:");
-            retornaErro.AppendLine(DateTime.Now.ToString());
-            throw new Exception(retornaErro.ToString());
+            return null;
         }
     }
 
@@ -138,7 +133,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
-
+        if (dados == null)
+            return null;
         PicagemDetalhes[] picagens = new PicagemDetalhes[dados.Tables[0].Rows.Count];
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -257,6 +253,8 @@ public class Service : IServiceSoap,IServiceRest
         query.AppendLine("LEFT JOIN PITurnoNormal ON PITurnos.ID = PITurnoNormal.Turno  ");
         query.AppendLine("LEFT JOIN PIHorarios ON PITurnos.ID = PIHorarios.Turno ");
         dados = ExecuteQuery(query.ToString());
+        if (dados == null)
+            return null;
         TurnoTempos[] tempos = new TurnoTempos[dados.Tables[0].Rows.Count];
 
         foreach (DataRow linha in dados.Tables[0].Rows)
@@ -289,6 +287,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
+        if (dados == null)
+            return null;
         PostoPicagem[] posto = new PostoPicagem[dados.Tables[0].Rows.Count];
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -312,6 +312,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
+        if (dados == null)
+            return null;
         AccaoSobrePicagem[] acc = new AccaoSobrePicagem[dados.Tables[0].Rows.Count];
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -335,6 +337,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
+        if (dados == null)
+            return null;
         PicagemEstado[] acc = new PicagemEstado[dados.Tables[0].Rows.Count];
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -365,6 +369,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
+        if (dados == null)
+            return null;
 
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -395,6 +401,8 @@ public class Service : IServiceSoap,IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
+        if (dados == null)
+            return null;
 
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
@@ -433,6 +441,8 @@ public class Service : IServiceSoap,IServiceRest
             parametroSQL[4] = new SqlParameter("@Obs", pic.Obs);
             parametroSQL[5] = new SqlParameter("@UtilCria", pic.OpJust);
             dados = ExecuteQuery(query.ToString(), parametroSQL);
+            if (dados == null)
+                return false;
             query = new StringBuilder();
             parametroSQL = new SqlParameter[3];
             query.AppendLine("UPDATE PIPicagens SET Data=@DataNova,Automatica=0 Tipo=5 ");
@@ -441,6 +451,8 @@ public class Service : IServiceSoap,IServiceRest
             parametroSQL[1] = new SqlParameter("@DataAntiga", pic.DataOld);
             parametroSQL[2] = new SqlParameter("@DataNova", pic.DataNew);
             dados = ExecuteQuery(query.ToString(), parametroSQL);
+            if (dados == null)
+                return false;
         }
         else
         {
@@ -454,6 +466,8 @@ public class Service : IServiceSoap,IServiceRest
             parametroSQL[4] = new SqlParameter("@Obs", pic.Obs);
             parametroSQL[5] = new SqlParameter("@UtilCria", pic.OpJust);
             dados = ExecuteQuery(query.ToString(), parametroSQL);
+            if (dados == null)
+                return false;
             query = new StringBuilder();
             parametroSQL = new SqlParameter[3];
             query.AppendLine("INSERT INTO PIPicagens (Operador,Data,Posto,Automatica,Periodo,Tipo) ");
@@ -462,6 +476,8 @@ public class Service : IServiceSoap,IServiceRest
             parametroSQL[1] = new SqlParameter("@Data", pic.DataNew);
             parametroSQL[2] = new SqlParameter("@Periodo", PeriodNew(pic.Op,pic.DataNew));
             dados = ExecuteQuery(query.ToString(), parametroSQL);
+            if (dados == null)
+                return false;
         }
         return true;
     }
@@ -505,6 +521,8 @@ public class Service : IServiceSoap,IServiceRest
             parametroSQL[0] = new SqlParameter("@Picagem", line.ToString());
             query.AppendLine("SELECT ID  FROM PIPicagensInput WHERE Picagem = @Picagem");
             dados = ExecuteQuery(query.ToString(), parametroSQL);
+            if (dados == null)
+                return false;
             query.Clear();
 
             //Caso a Picagem não tenha sido importada importa novamente.
@@ -543,7 +561,8 @@ public class Service : IServiceSoap,IServiceRest
         query.AppendLine("      WHERE PIPicagensSincronismo.Picagem = PIPicagensInput.Picagem ");
         query.AppendLine(")");
         linhas = ExecuteQuery(query.ToString(), null);
-       
+        if (linhas == null)
+            return false;
         //Percorre todas as linhas
         foreach (DataRow lines in linhas.Tables[0].Rows)
         {
@@ -605,8 +624,10 @@ public class Service : IServiceSoap,IServiceRest
                 query.AppendLine("  PIPicagensSincronismo.Data = PIPicagens.Data  ");
                 query.AppendLine("WHERE Sincronizado = 0  ");
                 apoio=ExecuteQuery(query.ToString(), null);
+                if (apoio == null)
+                    return false;
 
-                foreach(DataRow linh in apoio.Tables[0].Rows)
+                foreach (DataRow linh in apoio.Tables[0].Rows)
                 {
                     query.Clear();
                     paramSQL = new SqlParameter[1];
@@ -653,6 +674,8 @@ public class Service : IServiceSoap,IServiceRest
         paramSQL[0] = new SqlParameter("@Operador", op);
         paramSQL[1] = new SqlParameter("@Data", data.Date);
         dados = ExecuteQuery(query.ToString(),paramSQL);
+        if (dados == null)
+            return 0;
         return int.Parse(dados.Tables[0].Rows[0].ItemArray[0].ToString());
     }
 
@@ -669,7 +692,9 @@ public class Service : IServiceSoap,IServiceRest
         paramSQL[0] = new SqlParameter("@Operador", op);
         paramSQL[1] = new SqlParameter("@Data", data.Date);
         dados = ExecuteQuery(query.ToString(), paramSQL);
-        foreach(DataRow linha in dados.Tables[0].Rows)
+        if (dados == null)
+            return 0;
+        foreach (DataRow linha in dados.Tables[0].Rows)
         {
             if (int.Parse(linha.ItemArray[0].ToString()) == 1)
                 primeiro = true;
