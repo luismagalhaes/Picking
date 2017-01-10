@@ -6,18 +6,13 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 
-public class Service : IServiceSoap,IServiceRest
+public class Service :IServiceRest
 {
     #region Metodos para verificar se o serviço está ativo e funcional
 
     public IsAlive GetState()
     {
         return new IsAlive(true);
-    }
-
-    public bool IsAliveSoap()
-    {
-        return true;
     }
 
     #endregion
