@@ -52,7 +52,7 @@ public interface IServiceRest
 
     [OperationContract]
     [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
-              UriTemplate = "GetSynchronizationPicks")]
+              UriTemplate = "PostSynchronizationPicks")]
     bool PostSynchronizationPicks(Pick[] pick);
 
     [OperationContract]
