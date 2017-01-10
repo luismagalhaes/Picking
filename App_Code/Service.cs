@@ -481,7 +481,7 @@ public class Service :IServiceRest
 
     #region Efetua Sincronismo entre picagens
 
-    public bool GetSynchronizationPicks() 
+    public string GetSynchronizationPicks() 
     {
         //StringBuilder query = new StringBuilder();
         //SqlParameter[] parametroSQL = new SqlParameter[1];
@@ -501,9 +501,15 @@ public class Service :IServiceRest
         //ficheiroNPica.Delete();
         ////File.Create(ficheiro + "INPUT.txt");
         //File.Open(ficheiro + "INPUT.txt", FileMode.Create).Close();
-
-        var lines = File.ReadAllLines("Picking/INPUT.txt");
-        return true;
+        try
+        {
+            var lines = File.ReadAllLines("Picking/INPUT.txt");
+            return "SIM";
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
 
         ////VERIFICA SE O FICHEIRO EXISTE
         //FileInfo ficheiroPica = new FileInfo(ficheiro + "INPUT_TRATA.txt");
