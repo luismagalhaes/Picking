@@ -51,9 +51,9 @@ public interface IServiceRest
     List<TurnoTempos> GetListTimming();
 
     [OperationContract]
-    [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped,
+    [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json,
               UriTemplate = "GetSynchronizationPicks")]
-    string GetSynchronizationPicks();
+    bool PostSynchronizationPicks(Pick[] pick);
 
     [OperationContract]
     [WebInvoke(Method = "POST",

@@ -277,6 +277,26 @@ public class PicagemEstado
     }
 }
 
+
+[DataContract]
+public class Pick
+{
+    string descr;
+
+    public Pick(string descr)
+    {
+        this.descr = descr;
+    }
+
+    [DataMember]
+    public string Descr
+    {
+        get { return descr; }
+        set { descr = value; }
+    }
+}
+
+
 [DataContract]
 public class PicagemJustificacao
 {
