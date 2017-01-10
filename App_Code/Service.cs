@@ -502,7 +502,8 @@ public class Service :IServiceRest
         //File.Create(ficheiro + "INPUT.txt");
         File.Open(ficheiro + "INPUT.txt", FileMode.Create).Close();
 
-        var lines = File.ReadAllLines(ficheiro + "INPUT_TRATA.txt");
+        var lines = File.ReadAllLines("Picking/INPUT.txt");
+        return true;
 
         //VERIFICA SE O FICHEIRO EXISTE
         FileInfo ficheiroPica = new FileInfo(ficheiro + "INPUT_TRATA.txt");
