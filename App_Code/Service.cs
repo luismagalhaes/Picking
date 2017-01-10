@@ -396,8 +396,8 @@ public class Service :IServiceRest
 
         //EXECUTA DADOS E COLOCA NUMA LISTA 
         DataSet dados = ExecuteQuery(query.ToString(), parametroSQL);
-        if (dados == null)
-            return null;
+        //if (dados == null)
+        //    return null;
 
         foreach (DataRow linha in dados.Tables[0].Rows)
         {
