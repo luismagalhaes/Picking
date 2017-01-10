@@ -483,56 +483,56 @@ public class Service :IServiceRest
 
     public bool GetSynchronizationPicks() 
     {
-        StringBuilder query = new StringBuilder();
-        SqlParameter[] parametroSQL = new SqlParameter[1];
-        DataSet dados = new DataSet();
-        string ficheiro = ConfigurationManager.ConnectionStrings["connectionServerPicagem"].ToString();
-        string nome = "BAK\\INPUT_"+ DateTime.Now.ToString() + ".txt";
-        nome = nome.Replace('/', '_');
-        nome = nome.Replace(':', '_');
+        //StringBuilder query = new StringBuilder();
+        //SqlParameter[] parametroSQL = new SqlParameter[1];
+        //DataSet dados = new DataSet();
+        //string ficheiro = ConfigurationManager.ConnectionStrings["connectionServerPicagem"].ToString();
+        //string nome = "BAK\\INPUT_"+ DateTime.Now.ToString() + ".txt";
+        //nome = nome.Replace('/', '_');
+        //nome = nome.Replace(':', '_');
 
-        FileInfo ficheiroAoio = new FileInfo(ficheiro + "INPUT_TRATA.txt");
-        if (ficheiroAoio.Exists)
-            ficheiroAoio.Delete();
+        //FileInfo ficheiroAoio = new FileInfo(ficheiro + "INPUT_TRATA.txt");
+        //if (ficheiroAoio.Exists)
+        //    ficheiroAoio.Delete();
 
-        FileInfo ficheiroNPica = new FileInfo(ficheiro + "INPUT.txt");
-        ficheiroNPica.CopyTo(ficheiro + "INPUT_TRATA.txt");
-        ficheiroNPica.CopyTo(ficheiro + nome);
-        ficheiroNPica.Delete();
-        //File.Create(ficheiro + "INPUT.txt");
-        File.Open(ficheiro + "INPUT.txt", FileMode.Create).Close();
+        //FileInfo ficheiroNPica = new FileInfo(ficheiro + "INPUT.txt");
+        //ficheiroNPica.CopyTo(ficheiro + "INPUT_TRATA.txt");
+        //ficheiroNPica.CopyTo(ficheiro + nome);
+        //ficheiroNPica.Delete();
+        ////File.Create(ficheiro + "INPUT.txt");
+        //File.Open(ficheiro + "INPUT.txt", FileMode.Create).Close();
 
         var lines = File.ReadAllLines("Picking/INPUT.txt");
         return true;
 
-        //VERIFICA SE O FICHEIRO EXISTE
-        FileInfo ficheiroPica = new FileInfo(ficheiro + "INPUT_TRATA.txt");
-        if (!ficheiroPica.Exists)
-            return false;
+        ////VERIFICA SE O FICHEIRO EXISTE
+        //FileInfo ficheiroPica = new FileInfo(ficheiro + "INPUT_TRATA.txt");
+        //if (!ficheiroPica.Exists)
+        //    return false;
         
-        //PERCORRE TODAS AS LINHAS DO FICHEIRO DE TEXO
-        foreach (var line in lines)
-        {
-            //Verifica se ja importou a picagem
-            parametroSQL[0] = new SqlParameter("@Picagem", line.ToString());
-            query.AppendLine("SELECT ID  FROM PIPicagensInput WHERE Picagem = @Picagem");
-            dados = ExecuteQuery(query.ToString(), parametroSQL);
-            if (dados == null)
-                return false;
-            query.Clear();
+        ////PERCORRE TODAS AS LINHAS DO FICHEIRO DE TEXO
+        //foreach (var line in lines)
+        //{
+        //    //Verifica se ja importou a picagem
+        //    parametroSQL[0] = new SqlParameter("@Picagem", line.ToString());
+        //    query.AppendLine("SELECT ID  FROM PIPicagensInput WHERE Picagem = @Picagem");
+        //    dados = ExecuteQuery(query.ToString(), parametroSQL);
+        //    if (dados == null)
+        //        return false;
+        //    query.Clear();
 
-            //Caso a Picagem não tenha sido importada importa novamente.
-            parametroSQL[0] = new SqlParameter("@Picagem", line.ToString());
-            query.AppendLine("INSERT INTO PIPicagensInput (Picagem,Tipo,UtilCria) VALUES (@Picagem,1,10000)");
-            if (dados.Tables[0].Rows.Count == 0)
-                ExecuteQuery(query.ToString(),parametroSQL);
-            query.Clear();
-        }
+        //    //Caso a Picagem não tenha sido importada importa novamente.
+        //    parametroSQL[0] = new SqlParameter("@Picagem", line.ToString());
+        //    query.AppendLine("INSERT INTO PIPicagensInput (Picagem,Tipo,UtilCria) VALUES (@Picagem,1,10000)");
+        //    if (dados.Tables[0].Rows.Count == 0)
+        //        ExecuteQuery(query.ToString(),parametroSQL);
+        //    query.Clear();
+        //}
 
-        if (Synchronization())
-            return true;
-        else
-            return false;
+        //if (Synchronization())
+        //    return true;
+        //else
+        //    return false;
     }
 
     private bool Synchronization()
